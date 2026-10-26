@@ -13,4 +13,4 @@ Prototype: https://team-debrief.vercel.app (try "Load sample team")
 - *Team patterns* look for dropped ideas (psychological safety, Edmondson), quick unanimous votes (groupthink, Janis), and information only one member brought (hidden profiles, Stasser & Titus).
 - *Three structural actions* for the leader, plus *private nudges* for each member. Feedback stays private to protect psychological safety.
 
-**Design choices.** The participation numbers are computed exactly in the browser. The AI (Claude) is used only for judgment calls and must quote the transcript as evidence.
+**Design choices.** The participation numbers are computed exactly in the browser. The AI (GPT) is used only for judgment calls and must quote the transcript as evidence.

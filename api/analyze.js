@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 export const config = { maxDuration: 300 };
 
@@ -74,10 +75,42 @@ function block(label, text) {
   return text && text.trim() ? `<${label}>\n${text.trim()}\n</${label}>` : `<${label}>(not provided)</${label}>`;
 }
 
+// Uses OpenAI when OPENAI_API_KEY is set, otherwise Claude when ANTHROPIC_API_KEY is set.
+async function runOpenAI(user) {
+  const client = new OpenAI();
+  const resp = await client.responses.create({
+    model: process.env.OPENAI_MODEL || "gpt-5.4-mini",
+    reasoning: { effort: "low" },
+    instructions: SYSTEM,
+    input: user,
+    text: { format: { type: "json_schema", name: "team_debrief", schema: SCHEMA, strict: true } },
+  });
+  if (resp.status === "incomplete") throw new Error("The debrief was cut off. Try a shorter transcript.");
+  return JSON.parse(resp.output_text);
+}
+
+async function runClaude(user) {
+  const client = new Anthropic();
+  const stream = client.beta.messages.stream({
+    model: "claude-opus-5-5",
+    max_tokens: 16000,
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    output_config: { effort: "medium", format: { type: "json_schema", schema: SCHEMA } },
+    system: SYSTEM,
+    messages: [{ role: "user", content: user }],
+  });
+  const msg = await stream.finalMessage();
+  if (msg.stop_reason === "refusal") throw new Error("The model declined to analyze this input.");
+  if (msg.stop_reason === "max_tokens") throw new Error("The debrief was cut off. Try a shorter transcript.");
+  return JSON.parse(msg.content.filter((b) => b.type === "text").map((b) => b.text).join(""));
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return res.status(503).json({ error: "AI debrief is not configured on this deployment (missing ANTHROPIC_API_KEY). The participation metrics above still work." });
+  const useOpenAI = !!process.env.OPENAI_API_KEY;
+  if (!useOpenAI && !process.env.ANTHROPIC_API_KEY) {
+    return res.status(503).json({ error: "AI debrief is not configured on this deployment (no API key). The participation metrics above still work." });
   }
 
   const { metrics, transcript, charter, breakout, assessments } = req.body || {};
@@ -98,27 +131,11 @@ export default async function handler(req, res) {
   ].join("\n\n");
 
   try {
-    const client = new Anthropic();
-    const stream = client.beta.messages.stream({
-      model: "claude-opus-5-5",
-      max_tokens: 16000,
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
-      output_config: { effort: "medium", format: { type: "json_schema", schema: SCHEMA } },
-      system: SYSTEM,
-      messages: [{ role: "user", content: user }],
-    });
-    const msg = await stream.finalMessage();
-
-    if (msg.stop_reason === "refusal") return res.status(422).json({ error: "The model declined to analyze this input." });
-    if (msg.stop_reason === "max_tokens") return res.status(502).json({ error: "The debrief was cut off. Try a shorter transcript." });
-
-    const text = msg.content.filter((b) => b.type === "text").map((b) => b.text).join("");
-    return res.status(200).json(JSON.parse(text));
+    return res.status(200).json(useOpenAI ? await runOpenAI(user) : await runClaude(user));
   } catch (err) {
-    if (err instanceof Anthropic.RateLimitError) return res.status(429).json({ error: "Rate limited. Wait a minute and try again." });
-    if (err instanceof Anthropic.AuthenticationError) return res.status(503).json({ error: "The deployment's API key is invalid." });
-    if (err instanceof Anthropic.APIError) return res.status(502).json({ error: `AI service error: ${err.message}` });
+    if (err instanceof OpenAI.RateLimitError || err instanceof Anthropic.RateLimitError) return res.status(429).json({ error: "Rate limited or out of credit. Wait a minute and try again." });
+    if (err instanceof OpenAI.AuthenticationError || err instanceof Anthropic.AuthenticationError) return res.status(503).json({ error: "The deployment's API key is invalid." });
+    if (err instanceof OpenAI.APIError || err instanceof Anthropic.APIError) return res.status(502).json({ error: `AI service error: ${err.message}` });
     if (err instanceof SyntaxError) return res.status(502).json({ error: "The AI returned malformed output. Try again." });
     return res.status(500).json({ error: String(err.message || err) });
   }
