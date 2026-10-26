@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "team-debrief", "runtimeExecutable": "node", "runtimeArgs": ["scripts/dev.js"], "port": 3000 }
+  ]
+}

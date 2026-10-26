@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team Debrief</title>
+<meta name="description" content="Turn a team meeting transcript, your charter, and Breakout Learning results into a team-level debrief for the team leader.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f5f2; --surface: #fcfcfb; --surface-2: #f0efec; --border: #e2e0da;
+  --text: #0b0b0b; --text-2: #52514e; --muted: #7a7974;
+  --accent: #2a78d6; --accent-ink: #ffffff;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #e34948;
+  --seq-0: #f0efec; --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #6da7ec; --seq-4: #3987e5; --seq-5: #256abf; --seq-6: #184f95;
+  --seq-hi-ink: #ffffff;
+  --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+  --good-ink: #006300; --warn-ink: #8a5a00; --crit-ink: #a52a2a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --surface-2: #242422; --border: #33332f;
+    --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e86;
+    --accent: #3987e5;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+    --seq-0: #242422; --seq-1: #104281; --seq-2: #184f95; --seq-3: #1c5cab; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #6da7ec;
+    --seq-hi-ink: #0b0b0b;
+    --good-ink: #5fd35f; --warn-ink: #fab219; --crit-ink: #f08a8a;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211; --surface: #1a1a19; --surface-2: #242422; --border: #33332f;
+  --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e86;
+  --accent: #3987e5;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+  --seq-0: #242422; --seq-1: #104281; --seq-2: #184f95; --seq-3: #1c5cab; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #6da7ec;
+  --seq-hi-ink: #0b0b0b;
+    --good-ink: #5fd35f; --warn-ink: #fab219; --crit-ink: #f08a8a;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 Inter, system-ui, -apple-system, sans-serif; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 32px 16px 80px; }
+h1 { font-size: 30px; line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.02em; }
+h2 { font-size: 20px; margin: 0 0 4px; letter-spacing: -0.01em; }
+h3 { font-size: 15px; margin: 0 0 6px; }
+p { margin: 0 0 10px; }
+.sub { color: var(--text-2); max-width: 680px; }
+.muted { color: var(--muted); font-size: 13px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+details.howto summary { cursor: pointer; font-weight: 600; font-size: 16px; }
+.steps { margin: 12px 0 0; padding-left: 20px; }
+.steps li { margin-bottom: 8px; color: var(--text-2); }
+.steps b { color: var(--text); }
+label.field { display: block; font-weight: 600; margin-bottom: 4px; }
+.req { color: var(--crit-ink); font-weight: 500; font-size: 12px; margin-left: 6px; }
+.opt { color: var(--muted); font-weight: 500; font-size: 12px; margin-left: 6px; }
+.hint { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+textarea { width: 100%; min-height: 140px; resize: vertical; background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 10px; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
+textarea.tall { min-height: 260px; }
+textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+button, .btn { font: inherit; font-weight: 600; border-radius: 8px; padding: 10px 16px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button:disabled { opacity: .55; cursor: not-allowed; }
+input[type=file] { font-size: 13px; color: var(--text-2); max-width: 100%; }
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
+@media (max-width: 760px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+.tile { background: var(--surface-2); border-radius: 10px; padding: 12px 14px; }
+.tile .k { font-size: 12px; color: var(--text-2); }
+.tile .v { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+.tile .d { font-size: 12px; color: var(--muted); }
+.verdict { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 10px; margin-top: 14px; background: var(--surface-2); }
+.verdict .ic { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 13px; }
+.chart { margin-top: 10px; }
+.bar-row { display: grid; grid-template-columns: 120px 1fr 92px; align-items: center; gap: 10px; padding: 3px 0; }
+.bar-row .nm { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+@media (max-width: 560px) { .bar-row { grid-template-columns: 84px 1fr 84px; gap: 8px; } .bar-row .nm { font-size: 12px; } .qgrid { grid-template-columns: 70px repeat(4, 1fr); } }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.track { position: relative; height: 22px; }
+.bar { position: absolute; left: 0; top: 3px; height: 12px; border-radius: 0 4px 4px 0; }
+.track.two .bar { top: 1px; }
+.bar.thin { height: 5px; top: 16px; opacity: .55; }
+.eq { position: absolute; top: -3px; bottom: -3px; width: 0; border-left: 2px dashed var(--muted); }
+.val { font-size: 13px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text-2); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-2); margin-top: 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { display: inline-block; width: 16px; height: 8px; border-radius: 2px; }
+.sw.dash { border-top: 2px dashed var(--muted); height: 0; border-radius: 0; }
+.qgrid { display: grid; grid-template-columns: 120px repeat(4, 1fr); gap: 6px 8px; align-items: end; margin-top: 10px; }
+.qgrid .hd { font-size: 12px; color: var(--muted); text-align: center; }
+.qcell { height: 40px; display: flex; align-items: flex-end; background: var(--surface-2); border-radius: 4px; }
+.qcell > div { width: 100%; border-radius: 4px 4px 0 0; }
+table.matrix { border-collapse: separate; border-spacing: 2px; font-size: 12px; margin-top: 10px; }
+table.matrix th { font-weight: 500; color: var(--text-2); padding: 4px 6px; text-align: center; white-space: nowrap; }
+table.matrix th.rh { text-align: right; }
+table.matrix td { width: 52px; height: 32px; text-align: center; border-radius: 4px; font-variant-numeric: tabular-nums; }
+.scroll { overflow-x: auto; }
+table.stats { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+table.stats th, table.stats td { padding: 7px 8px; border-bottom: 1px solid var(--border); text-align: right; font-variant-numeric: tabular-nums; }
+table.stats th:first-child, table.stats td:first-child { text-align: left; }
+table.stats th { color: var(--text-2); font-weight: 500; }
+.pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); }
+.pill.good { color: var(--good-ink); } .pill.warn { color: var(--warn-ink); } .pill.crit { color: var(--crit-ink); }
+.ai-section { margin-top: 18px; }
+.ai-section h3 { font-size: 16px; margin-bottom: 8px; }
+.item { border-left: 3px solid var(--border); padding: 4px 0 4px 12px; margin-bottom: 12px; }
+.item .t { font-weight: 600; }
+.item .e { color: var(--text-2); font-size: 14px; }
+.item .c { color: var(--muted); font-size: 13px; }
+.headline { font-size: 18px; font-weight: 600; line-height: 1.4; }
+.nudges { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.nudge { background: var(--surface-2); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+.nudge .who { font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.err { color: var(--crit-ink); margin-top: 10px; }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#tip { position: fixed; pointer-events: none; background: var(--text); color: var(--bg); font-size: 12px; padding: 6px 8px; border-radius: 6px; max-width: 260px; z-index: 10; display: none; }
+.hidden { display: none !important; }
+.toolbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; }
+@media print {
+  .no-print, .toolbar, #inputs, details.howto { display: none !important; }
+  body { background: #fff; }
+  .card { break-inside: avoid; border-color: #ddd; }
+}
+</style>
+</head>
+<body>
+<div id="tip"></div>
+<div class="wrap">
+  <header>
+    <h1>Team Debrief</h1>
+    <p class="sub">For team leaders. Paste a meeting transcript and your team charter, and optionally your Breakout Learning results. You get a <b>team-level</b> picture of how you work together: who gets airtime, whether you follow your own charter, which roles fall on one person, and three changes to make next meeting.</p>
+  </header>
+
+  <div class="card">
+    <details class="howto" open>
+      <summary>How to use this with your own team (3 minutes)</summary>
+      <ol class="steps">
+        <li><b>Record a team meeting</b> in Zoom, Teams, or Otter with transcription turned on. Export the transcript (.txt or .vtt). Speaker names must be in it, e.g. <code>Avery Chen: text</code>, <code>[00:01:05] Avery: text</code>, or a WebVTT file.</li>
+        <li><b>Paste or upload the transcript</b> in box 1. Everything else is optional, but each extra source makes the debrief sharper.</li>
+        <li><b>Paste your team charter</b> in box 2. The tool checks the meeting against <i>your own</i> norms (decision rules, roles, accountability).</li>
+        <li><b>Add Breakout Learning data</b> (optional). In box 3, type each member's talk time from their "Session Results" page, one per line: <code>Name, minutes</code>. In box 4, paste the evaluation points from each member's report. Ask teammates to share theirs with you first.</li>
+        <li><b>Add individual assessments</b> (optional) in box 5, e.g. conflict styles or personality results.</li>
+        <li>Click <b>Analyze participation</b> for instant metrics (computed in your browser, nothing is sent). Then click <b>Generate AI debrief</b> for the full analysis.</li>
+        <li><b>Share carefully.</b> The team-level sections are meant for the whole team. The private nudges are meant to go to each person individually.</li>
+      </ol>
+      <p class="muted" style="margin-top:10px">Privacy: Participation metrics are computed in your browser. The AI debrief sends your inputs to Anthropic's Claude API to generate the report. Nothing is stored by this site. Get your teammates' consent before uploading their data. Want to see it first? Click <b>Load sample team</b> (a fictional team).</p>
+    </details>
+  </div>
+
+  <section id="inputs">
+    <div class="card">
+      <label class="field" for="transcript">1. Meeting transcript <span class="req">required</span></label>
+      <div class="hint">Paste text, or upload a .txt / .vtt / .srt export.</div>
+      <textarea id="transcript" class="tall" placeholder="[00:00:05] Avery Chen: Okay, let's get started..."></textarea>
+      <div class="row" style="margin-top:8px"><input type="file" id="file" accept=".txt,.vtt,.srt,.md,text/plain"><span id="parseInfo" class="muted"></span></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <label class="field" for="charter">2. Team charter <span class="opt">recommended</span></label>
+        <div class="hint">Mission, goals, roles, decision rules, norms, accountability.</div>
+        <textarea id="charter"></textarea>
+      </div>
+      <div class="card">
+        <label class="field" for="blmin">3. Breakout Learning talk time <span class="opt">optional</span></label>
+        <div class="hint">One per line: <code>Name, minutes</code> (from the Group Balance Score chart).</div>
+        <textarea id="blmin" placeholder="Avery C., 11.2&#10;Ben O., 8.1"></textarea>
+      </div>
+      <div class="card">
+        <label class="field" for="breakout">4. Breakout Learning feedback <span class="opt">optional</span></label>
+        <div class="hint">Paste each member's evaluation points and summary.</div>
+        <textarea id="breakout"></textarea>
+      </div>
+      <div class="card">
+        <label class="field" for="assess">5. Individual assessments <span class="opt">optional</span></label>
+        <div class="hint">Conflict styles, Big Five, strengths, etc.</div>
+        <textarea id="assess"></textarea>
+      </div>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <button class="primary" id="analyze">Analyze participation</button>
+      <button id="sample">Load sample team</button>
+      <button id="clear">Clear</button>
+    </div>
+    <div id="inErr" class="err"></div>
+  </section>
+
+  <section id="results" class="hidden">
+    <div class="toolbar row no-print">
+      <button class="primary" id="ai">Generate AI debrief</button>
+      <button id="print">Print / save PDF</button>
+      <span id="aiStatus" class="muted"></span>
+    </div>
+
+    <div class="card">
+      <h2>Airtime balance</h2>
+      <p class="muted">Share of words spoken in the meeting. The dashed line marks an equal share. We flag anyone under 0.6× or over 1.4× an equal share. A single "balanced / unbalanced" score can hide a quiet member, so this checks each person.</p>
+      <div class="tiles" id="tiles"></div>
+      <div id="verdict"></div>
+      <div class="chart" id="shareChart"></div>
+      <div class="legend" id="shareLegend"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2>Airtime across the meeting</h2>
+        <p class="muted">Each person's share of words in each quarter of the meeting. Look for anyone who fades out or only speaks when called on.</p>
+        <div id="quarters"></div>
+      </div>
+      <div class="card">
+        <h2>Who responds to whom</h2>
+        <p class="muted">How often the speaker in each row was followed by the speaker in each column. One busy row and column means a hub-and-spoke pattern. A spread-out grid means members talk to each other.</p>
+        <div class="scroll" id="matrix"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Per-person detail</h2>
+      <div class="scroll" id="stats"></div>
+    </div>
+
+    <div id="aiOut"></div>
+  </section>
+</div>
+
+<script src="sample.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
+const keyOf = (name) => name.toLowerCase().replace(/[^a-z\s]/g, "").trim().split(/\s+/)[0] || name.toLowerCase();
+const color = (i) => `var(--s${(i % 8) + 1})`;
+
+// ---------- transcript parsing ----------
+const NAME = "([A-Z][\\w.'\\-]*(?:\\s+[A-Z][\\w.'\\-]*){0,3}|Speaker\\s*\\d+)";
+const TS = "(\\d{1,2}:\\d{2}(?::\\d{2})?)(?:[.,]\\d+)?";
+const reVoice = /^<v(?:\.[^\s>]+)?\s+([^>]+)>(.*?)(?:<\/v>)?$/;
+const reHeader = new RegExp(`^\\[?${NAME}\\]?\\s+\\(?${TS}\\)?$`);   // Otter / Zoom: "Avery Chen  0:03"
+const reLeadTs = new RegExp(`^\\[?${TS}\\]?\\s*[-–]?\\s*`);
+const reNameColon = new RegExp(`^${NAME}\\s*:\\s*(.+)$`);
+
+function parseTranscript(text) {
+  const turns = [];
+  let cur = null;
+  const push = (speaker, said) => {
+    speaker = speaker.trim(); said = (said || "").trim();
+    if (cur && keyOf(cur.speaker) === keyOf(speaker)) { cur.text += " " + said; return; }
+    cur = { speaker, text: said }; turns.push(cur);
+  };
+  for (const raw of text.replace(/\r/g, "").split("\n")) {
+    let line = raw.trim();
+    if (!line || line === "WEBVTT" || /^\d+$/.test(line) || line.includes("-->") || /^NOTE\b/.test(line)) continue;
+    let m;
+    if ((m = line.match(reVoice))) { push(m[1], m[2]); continue; }
+    if ((m = line.match(reHeader))) { push(m[1], ""); continue; }
+    line = line.replace(reLeadTs, "");
+    if ((m = line.match(reNameColon))) { push(m[1], m[2]); continue; }
+    if (cur) cur.text += " " + line;
+  }
+  return turns.filter((t) => t.text.trim());
+}
+
+function words(s) { return (s.match(/[\w']+/g) || []).length; }
+
+// ---------- metrics ----------
+function computeMetrics(turns, blText) {
+  const order = [], by = {};
+  turns.forEach((t) => {
+    const k = keyOf(t.speaker);
+    if (!by[k]) { by[k] = { key: k, name: t.speaker, words: 0, turns: 0, questions: 0, longest: 0, quarters: [0, 0, 0, 0] }; order.push(k); }
+    // keep the longest form of the name seen
+    if (t.speaker.length > by[k].name.length) by[k].name = t.speaker;
+  });
+  const totalWords = turns.reduce((n, t) => n + words(t.text), 0) || 1;
+  let cum = 0;
+  turns.forEach((t) => {
+    const s = by[keyOf(t.speaker)], w = words(t.text);
+    const q = Math.min(3, Math.floor((cum / totalWords) * 4));
+    s.words += w; s.turns += 1; s.longest = Math.max(s.longest, w); s.quarters[q] += w;
+    if (t.text.includes("?")) s.questions += 1;
+    cum += w;
+  });
+  const qTotals = [0, 1, 2, 3].map((q) => order.reduce((n, k) => n + by[k].quarters[q], 0) || 1);
+  const n = order.length, equal = 1 / n;
+  const speakers = order.map((k, i) => {
+    const s = by[k];
+    const share = s.words / totalWords, ratio = share / equal;
+    return {
+      ...s, idx: i, share, ratio,
+      avgWords: s.turns ? s.words / s.turns : 0,
+      quarterShare: s.quarters.map((w, q) => w / qTotals[q]),
+      flag: ratio < 0.6 ? "under-heard" : ratio > 1.4 ? "dominant" : "balanced",
+    };
+  });
+
+  // transitions
+  const idx = Object.fromEntries(order.map((k, i) => [k, i]));
+  const matrix = order.map(() => order.map(() => 0));
+  for (let i = 1; i < turns.length; i++) matrix[idx[keyOf(turns[i - 1].speaker)]][idx[keyOf(turns[i].speaker)]]++;
+
+  // breakout learning minutes
+  const bl = {};
+  let blTotal = 0;
+  (blText || "").split("\n").forEach((line) => {
+    const m = line.match(/^\s*(.+?)[,:\t]\s*([\d.]+)/);
+    if (m) { bl[keyOf(m[1])] = { label: m[1].trim(), minutes: parseFloat(m[2]) }; blTotal += parseFloat(m[2]); }
+  });
+  const hasBL = blTotal > 0;
+  speakers.forEach((s) => { s.blShare = hasBL && bl[s.key] ? bl[s.key].minutes / blTotal : null; s.blMinutes = bl[s.key]?.minutes ?? null; });
+  const blUnmatched = Object.keys(bl).filter((k) => !by[k]).map((k) => bl[k].label);
+
+  const sorted = [...speakers].sort((a, b) => b.share - a.share);
+  return {
+    speakers, matrix, totalWords, totalTurns: turns.length, equal, hasBL, blUnmatched,
+    topTwoShare: sorted.slice(0, 2).reduce((n, s) => n + s.share, 0),
+    quietest: sorted[sorted.length - 1], loudest: sorted[0],
+    gap: sorted[sorted.length - 1].share ? sorted[0].share / sorted[sorted.length - 1].share : Infinity,
+  };
+}
+
+// ---------- rendering ----------
+let M = null, TURNS = null;
+
+function renderMetrics(m) {
+  const n = m.speakers.length;
+  $("tiles").innerHTML = [
+    ["Speakers", n, `${m.totalTurns} turns · ${m.totalWords.toLocaleString()} words`],
+    ["Equal share", pct(m.equal), "per person"],
+    ["Top 2 speakers", pct(m.topTwoShare), `vs ${pct(Math.min(1, 2 * m.equal))} if equal`],
+    ["Airtime gap", isFinite(m.gap) ? m.gap.toFixed(1) + "×" : "∞", `${esc(first(m.loudest.name))} vs ${esc(first(m.quietest.name))}`],
+  ].map(([k, v, d]) => `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join("");
+
+  const under = m.speakers.filter((s) => s.flag === "under-heard"), dom = m.speakers.filter((s) => s.flag === "dominant");
+  let ic, txt;
+  if (n < 2) { ic = ["var(--warning)", "!"]; txt = "Only one speaker was detected. Check that the transcript includes speaker names."; }
+  else if (!under.length && !dom.length) { ic = ["var(--good)", "✓"]; txt = "<b>Balanced.</b> Everyone is within 0.6–1.4× an equal share of airtime."; }
+  else {
+    ic = [under.length ? "var(--critical)" : "var(--serious)", "!"];
+    txt = "<b>Uneven airtime.</b> " +
+      (under.length ? `Under-heard: ${under.map((s) => `${esc(first(s.name))} (${pct(s.share)})`).join(", ")}. ` : "") +
+      (dom.length ? `Dominant: ${dom.map((s) => `${esc(first(s.name))} (${pct(s.share)})`).join(", ")}. ` : "") +
+      "Research on collective intelligence finds that teams where members speak in roughly equal amounts outperform teams dominated by a few voices.";
+  }
+  $("verdict").innerHTML = `<div class="verdict"><div class="ic" style="background:${ic[0]}">${ic[1]}</div><div>${txt}</div></div>`;
+
+  const max = Math.max(...m.speakers.map((s) => Math.max(s.share, s.blShare || 0)), m.equal) * 1.1;
+  $("shareChart").innerHTML = m.speakers.map((s) => {
+    const tip = `${s.name}: ${pct(s.share, 1)} of meeting words (${s.words} words, ${s.turns} turns)` +
+      (s.blShare != null ? ` · Breakout Learning: ${pct(s.blShare, 1)} (${s.blMinutes} min)` : "");
+    return `<div class="bar-row" data-tip="${esc(tip)}">
+      <div class="nm"><span class="dot" style="background:${color(s.idx)}"></span>${esc(s.name)}</div>
+      <div class="track${s.blShare != null ? " two" : ""}">
+        <div class="bar" style="width:${(s.share / max) * 100}%;background:${color(s.idx)}"></div>
+        ${s.blShare != null ? `<div class="bar thin" style="width:${(s.blShare / max) * 100}%;background:${color(s.idx)};"></div>` : ""}
+        <div class="eq" style="left:${(m.equal / max) * 100}%"></div>
+      </div>
+      <div class="val">${pct(s.share)} <span class="pill ${s.flag === "under-heard" ? "crit" : s.flag === "dominant" ? "warn" : "good"}" style="margin-left:2px">${s.ratio.toFixed(2)}×</span></div>
+    </div>`;
+  }).join("");
+  $("shareLegend").innerHTML = `<span><i class="sw" style="background:var(--text-2)"></i>Team meeting</span>` +
+    (m.hasBL ? `<span><i class="sw" style="background:var(--text-2);opacity:.55;height:4px"></i>Breakout Learning session</span>` : "") +
+    `<span><i class="sw dash"></i>Equal share</span>` +
+    (m.blUnmatched.length ? `<span class="muted">Not matched to transcript: ${esc(m.blUnmatched.join(", "))} (first names must match)</span>` : "");
+
+  $("quarters").innerHTML = `<div class="qgrid"><div></div>${["Q1", "Q2", "Q3", "Q4"].map((q) => `<div class="hd">${q}</div>`).join("")}` +
+    m.speakers.map((s) => `<div class="nm" style="font-size:13px;display:flex;align-items:center;gap:6px;align-self:center"><span class="dot" style="background:${color(s.idx)}"></span>${esc(first(s.name))}</div>` +
+      s.quarterShare.map((v, q) => `<div class="qcell" data-tip="${esc(`${first(s.name)}, quarter ${q + 1}: ${pct(v)} of words`)}"><div style="height:${Math.max(v * 100, v > 0 ? 4 : 0)}%;background:${color(s.idx)}"></div></div>`).join("")
+    ).join("") + `</div>`;
+
+  const mx = Math.max(1, ...m.matrix.flat());
+  const seq = (v) => v === 0 ? "var(--seq-0)" : `var(--seq-${Math.min(6, 1 + Math.floor((v / mx) * 5.99))})`;
+  const ink = (v) => v / mx > 0.55 ? "var(--seq-hi-ink)" : "var(--text)";
+  $("matrix").innerHTML = `<table class="matrix"><tr><th class="rh muted">then →</th>${m.speakers.map((s) => `<th>${esc(first(s.name))}</th>`).join("")}</tr>` +
+    m.speakers.map((a, i) => `<tr><th class="rh">${esc(first(a.name))}</th>${m.matrix[i].map((v, j) =>
+      `<td style="background:${seq(v)};color:${ink(v)}" data-tip="${esc(`${first(a.name)} → ${first(m.speakers[j].name)}: ${v} time${v === 1 ? "" : "s"}`)}">${v || ""}</td>`).join("")}</tr>`).join("") + `</table>`;
+
+  $("stats").innerHTML = `<table class="stats"><tr><th>Member</th><th>Words</th><th>Share</th><th>Turns</th><th>Words / turn</th><th>Longest turn</th><th>Questions asked</th>${m.hasBL ? "<th>BL minutes</th><th>BL share</th>" : ""}<th>Flag</th></tr>` +
+    m.speakers.map((s) => `<tr><td><span class="dot" style="display:inline-block;background:${color(s.idx)};margin-right:6px"></span>${esc(s.name)}</td><td>${s.words}</td><td>${pct(s.share, 1)}</td><td>${s.turns}</td><td>${s.avgWords.toFixed(0)}</td><td>${s.longest}</td><td>${s.questions}</td>${m.hasBL ? `<td>${s.blMinutes ?? "–"}</td><td>${s.blShare != null ? pct(s.blShare, 1) : "–"}</td>` : ""}<td><span class="pill ${s.flag === "under-heard" ? "crit" : s.flag === "dominant" ? "warn" : "good"}">${s.flag}</span></td></tr>`).join("") + `</table>`;
+}
+
+function first(name) { return name.split(/\s+/)[0]; }
+
+function metricsForAI(m) {
+  return {
+    note: "Shares are fractions of words spoken in the transcript. Flags: under-heard < 0.6x equal share, dominant > 1.4x.",
+    equal_share: +m.equal.toFixed(3), top_two_share: +m.topTwoShare.toFixed(3), airtime_gap: isFinite(m.gap) ? +m.gap.toFixed(2) : null,
+    members: m.speakers.map((s) => ({
+      name: s.name, words: s.words, share: +s.share.toFixed(3), turns: s.turns, avg_words_per_turn: +s.avgWords.toFixed(1),
+      questions_asked: s.questions, share_by_quarter: s.quarterShare.map((v) => +v.toFixed(2)), flag: s.flag,
+      breakout_learning_minutes: s.blMinutes, breakout_learning_share: s.blShare != null ? +s.blShare.toFixed(3) : null,
+    })),
+    who_follows_whom: Object.fromEntries(m.speakers.map((a, i) => [first(a.name), Object.fromEntries(m.speakers.map((b, j) => [first(b.name), m.matrix[i][j]]))])),
+  };
+}
+
+function renderAI(r) {
+  const nameIdx = (p) => { const s = M.speakers.find((x) => x.key === keyOf(p)); return s ? s.idx : null; };
+  const dot = (p) => { const i = nameIdx(p); return i == null ? "" : `<span class="dot" style="background:${color(i)}"></span>`; };
+  const statusPill = { followed: ["good", "Followed"], partly: ["warn", "Partly"], not_followed: ["crit", "Not followed"], not_observed: ["", "Not observed"] };
+  $("aiOut").innerHTML = `
+  <div class="card">
+    <h2>AI team debrief</h2>
+    <p class="muted">Generated by Claude from your inputs. Treat it as a starting point for a team conversation, not a verdict. Check the quotes against the transcript.</p>
+    <p class="headline" style="margin-top:12px">${esc(r.headline)}</p>
+    <div class="ai-section"><h3>Team patterns</h3>${(r.team_patterns || []).map((p) => `<div class="item"><div class="t">${esc(p.title)}</div><div class="e">${esc(p.evidence)}</div><div class="c">${esc(p.why_it_matters)}</div></div>`).join("")}</div>
+  </div>
+  <div class="card">
+    <h2>Charter vs. reality</h2>
+    <p class="muted">Did the meeting follow the norms your team wrote down?</p>
+    <div class="scroll"><table class="stats"><tr><th>Norm</th><th style="text-align:left">Status</th><th style="text-align:left">Evidence</th></tr>
+    ${(r.charter_check || []).map((c) => { const [cls, lbl] = statusPill[c.status] || ["", c.status]; return `<tr><td style="min-width:180px">${esc(c.norm)}</td><td style="text-align:left;white-space:nowrap"><span class="pill ${cls}">${lbl}</span></td><td style="text-align:left;color:var(--text-2)">${esc(c.evidence)}</td></tr>`; }).join("")}
+    </table></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h2>Roles actually played</h2>
+      ${(r.roles || []).map((x) => `<div class="item"><div class="t" style="display:flex;align-items:center;gap:6px">${dot(x.person)}${esc(x.person)}</div><div class="e">${esc((x.roles_observed || []).join(", "))}</div><div class="c">${esc(x.note)}</div></div>`).join("")}
+      <p style="margin-top:8px"><b>Role concentration:</b> <span style="color:var(--text-2)">${esc(r.role_concentration)}</span></p>
+    </div>
+    <div class="card">
+      <h2>Three changes for next meeting</h2>
+      ${(r.actions || []).map((a, i) => `<div class="item" style="border-color:var(--accent)"><div class="t">${i + 1}. ${esc(a.action)}</div><div class="e">${esc(a.why)}</div><div class="c">${esc(a.concept)}</div></div>`).join("")}
+    </div>
+  </div>
+  <div class="card">
+    <h2>Private nudges</h2>
+    <p class="muted">Send each person only their own card.</p>
+    <div class="nudges" style="margin-top:10px">${(r.nudges || []).map((x) => `<div class="nudge"><div class="who">${dot(x.person)}${esc(x.person)}</div><div><b>Strength:</b> ${esc(x.strength)}</div><div style="margin-top:4px"><b>Try next time:</b> ${esc(x.try_next)}</div></div>`).join("")}</div>
+    ${r.data_gaps ? `<p class="muted" style="margin-top:14px"><b>To sharpen this:</b> ${esc(r.data_gaps)}</p>` : ""}
+  </div>`;
+}
+
+// ---------- events ----------
+function analyze() {
+  $("inErr").textContent = "";
+  const text = $("transcript").value;
+  if (!text.trim()) { $("inErr").textContent = "Paste or upload a transcript first."; return; }
+  TURNS = parseTranscript(text);
+  if (TURNS.length < 2) { $("inErr").textContent = "Couldn't find speaker turns. Each line should start with a speaker name, like \"Avery Chen: ...\" (see step 1)."; return; }
+  M = computeMetrics(TURNS, $("blmin").value);
+  $("parseInfo").textContent = `Detected ${M.speakers.length} speakers and ${TURNS.length} turns.`;
+  renderMetrics(M);
+  $("aiOut").innerHTML = ""; $("aiStatus").textContent = "";
+  $("results").classList.remove("hidden");
+  $("results").scrollIntoView({ behavior: "smooth" });
+}
+
+async function runAI() {
+  if (!M) analyze();
+  if (!M) return;
+  const btn = $("ai");
+  btn.disabled = true;
+  $("aiStatus").innerHTML = `<span class="spinner"></span>Reading the meeting… usually 30–90 seconds.`;
+  try {
+    const res = await fetch("/api/analyze", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ metrics: metricsForAI(M), transcript: $("transcript").value, charter: $("charter").value, breakout: $("breakout").value, assessments: $("assess").value }),
+    });
+    const data = await res.json().catch(() => ({ error: `Server error (${res.status}).` }));
+    if (!res.ok) throw new Error(data.error || `Server error (${res.status}).`);
+    renderAI(data);
+    $("aiStatus").textContent = "Done.";
+    $("aiOut").scrollIntoView({ behavior: "smooth" });
+  } catch (e) {
+    $("aiStatus").innerHTML = `<span style="color:var(--crit-ink)">${esc(e.message)}</span>`;
+  } finally { btn.disabled = false; }
+}
+
+$("analyze").onclick = analyze;
+$("ai").onclick = runAI;
+$("print").onclick = () => window.print();
+$("sample").onclick = () => {
+  $("transcript").value = SAMPLE.transcript; $("charter").value = SAMPLE.charter; $("blmin").value = SAMPLE.breakoutMinutes;
+  $("breakout").value = SAMPLE.breakout; $("assess").value = SAMPLE.assessments; analyze();
+};
+$("clear").onclick = () => { ["transcript", "charter", "blmin", "breakout", "assess"].forEach((id) => ($(id).value = "")); $("results").classList.add("hidden"); $("parseInfo").textContent = ""; M = null; };
+$("file").onchange = async (e) => { const f = e.target.files[0]; if (f) { $("transcript").value = await f.text(); $("parseInfo").textContent = `Loaded ${f.name}.`; } };
+
+// tooltip
+const tip = $("tip");
+document.addEventListener("mousemove", (e) => {
+  const t = e.target.closest("[data-tip]");
+  if (!t) { tip.style.display = "none"; return; }
+  tip.textContent = t.dataset.tip; tip.style.display = "block";
+  const x = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8);
+  tip.style.left = x + "px"; tip.style.top = (e.clientY + 14) + "px";
+});
+</script>
+</body>
+</html>
