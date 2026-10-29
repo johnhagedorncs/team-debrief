@@ -1,0 +1,116 @@
+[Jordan Lee] 14:02:05
+Hey everyone, thanks for hopping on. Today we need to lock the survey questions and figure out who's building the slides for the midterm presentation.
+
+[Priya Shah] 14:02:18
+Before we start, can we look at the draft survey? I left some comments on question four. I think it's leading.
+
+[Jordan Lee] 14:02:26
+Yeah, pull it up.
+
+[Priya Shah] 14:02:30
+So right now it says "How much do you enjoy using our app?" That assumes they enjoy it. I'd change it to "How would you describe your experience using the app?"
+
+[Marcus Bell] 14:02:44
+I kind of disagree. If we make it open-ended we'll get forty different answers and we won't be able to chart anything. A scale is way easier to analyze.
+
+[Priya Shah] 14:02:55
+We could keep a scale but make it neutral. Like one to five, very negative to very positive.
+
+[Marcus Bell] 14:03:02
+Okay, that works. Neutral scale, I'm fine with that.
+
+[Jordan Lee] 14:03:06
+Nice, that was quick. Sofia, anything on the survey?
+
+[Sofia Ramirez] 14:03:10
+Um, I think it looks fine.
+
+[Jordan Lee] 14:03:13
+Cool. Tomas, you've been quiet, anything?
+
+[Tomas Novak] 14:03:16
+No, it's good.
+
+[Marcus Bell] 14:03:19
+Actually one more thing. Question seven asks about price and question eight asks about price again in a different way. We should cut one.
+
+[Priya Shah] 14:03:27
+Agreed, cut eight. Seven is clearer.
+
+[Jordan Lee] 14:03:31
+Okay, cutting eight. Now slides. The charter says we split the work evenly and everyone owns a section. Does anyone want a specific part?
+
+[Marcus Bell] 14:03:40
+I'll take the data analysis section since I'm doing the charts anyway.
+
+[Priya Shah] 14:03:45
+I can do the problem statement and the research method.
+
+[Jordan Lee] 14:03:50
+I'll do the intro and the recommendations. Sofia and Tomas, that leaves the competitor slides and the conclusion.
+
+[Sofia Ramirez] 14:03:58
+I can do competitors.
+
+[Tomas Novak] 14:04:01
+Sure, conclusion.
+
+[Marcus Bell] 14:04:04
+Wait, should the conclusion person also be the one doing the recommendations? Those are kind of the same thing.
+
+[Jordan Lee] 14:04:12
+Hmm, maybe. Tomas, do you want to just help me with recommendations instead?
+
+[Tomas Novak] 14:04:16
+I mean, whatever's easiest.
+
+[Priya Shah] 14:04:19
+Tomas, you were the one who did the interviews with the campus gym users, right? You probably know the recommendations better than any of us.
+
+[Tomas Novak] 14:04:27
+Yeah, I did five of them. Honestly, a lot of them said the app is fine, it's the check-in kiosk at the gym that's the problem. So I'm not sure our recommendation should even be about the app.
+
+[Marcus Bell] 14:04:41
+Wait, that's a big deal. If the problem is the kiosk, our whole survey is pointed at the wrong thing.
+
+[Jordan Lee] 14:04:47
+That's a good point. Why didn't you bring that up earlier?
+
+[Tomas Novak] 14:04:51
+I didn't want to derail things. Everyone already agreed on the app angle.
+
+[Priya Shah] 14:04:57
+No, this is exactly what we need to hear. Can we add two kiosk questions to the survey?
+
+[Marcus Bell] 14:05:03
+Yes. Tomas, can you write those since you heard it firsthand?
+
+[Tomas Novak] 14:05:07
+Okay, I can do that by tomorrow night.
+
+[Jordan Lee] 14:05:11
+Great. So Tomas writes two kiosk questions by tomorrow night and co-owns recommendations with me. Sofia has competitors. Deadlines: draft slides due Sunday at 8 pm so we have Monday for peer review.
+
+[Sofia Ramirez] 14:05:24
+Is the peer review the same pairs as last time?
+
+[Jordan Lee] 14:05:28
+Let's switch it up. Priya reviews Marcus, Marcus reviews me, I review Sofia, Sofia reviews Tomas, Tomas reviews Priya.
+
+[Priya Shah] 14:05:37
+Works for me. I'll put all of this in the tracker right after the call.
+
+[Marcus Bell] 14:05:41
+And next meeting it's my turn to facilitate, right? We said we'd rotate.
+
+[Jordan Lee] 14:05:45
+Yep, you're up. Anything else? Sofia, Tomas, any concerns?
+
+[Sofia Ramirez] 14:05:50
+I might need help finding competitor pricing data. I'm not sure where to look.
+
+[Marcus Bell] 14:05:55
+I can send you the database I used last semester. Message me after this.
+
+[Jordan Lee] 14:05:59
+Perfect. Thanks everyone, good meeting.

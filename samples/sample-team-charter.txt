@@ -1,0 +1,9 @@
+TEAM NORTHSTAR CHARTER
+Mission: Build a useful, evidence-based recommendation for the campus fitness app client.
+Goals: A or A- on every deliverable. Drafts done 24 hours before peer review.
+Roles: Jordan - facilitator (rotates each meeting). Priya - recorder/tracker. Marcus - data lead. Sofia - researcher. Tomas - customer interviews.
+Decision making: Discuss until consensus. If stuck after 10 minutes, majority vote.
+Meeting norms: Rotate facilitator every meeting. Facilitator checks in with every member before closing a decision.
+Accountability: Every task has an owner and a due date in the tracker. Peer-review pairs rotate each deliverable.
+Conflict: Disagree about ideas openly; never about people. Anyone can pause a decision to raise a concern.
+Communication: Group chat, respond within 24 hours. Ask for help early.
